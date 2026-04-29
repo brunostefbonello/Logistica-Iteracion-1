@@ -1,23 +1,26 @@
 [
   {
-    "id": "PQ-JSON-1",
+    "id": "1",
     "peso": 10.0,
     "destino": "Palermo",
     "urgente": false,
-    "contenido": "Ropa"
+    "tipoContenido": "Fragil",
+    "contenido": "Relojes"
   },
   {
-    "id": "PQ-JSON-PESADO",
+    "id": "2",
     "peso": 60.0,
     "destino": "Belgrano",
     "urgente": false,
+    "tipoContenido": "Electronica",
     "contenido": "Heladera"
   },
   {
-    "id": "PQ-JSON-URGENTE",
+    "id": "3",
     "peso": 2.0,
     "destino": "Recoleta",
     "urgente": true,
-    "contenido": "Documentos"
+    "tipoContenido": "Fragil",
+    "contenido": "Jarrón"
   }
 ]
