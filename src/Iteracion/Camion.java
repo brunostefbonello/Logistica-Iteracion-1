@@ -21,7 +21,7 @@ public class Camion {
 			return cajaDelCamion.pop();
 		}
 		else {
-			System.out.println("El camion ya esta vacio");
+			System.out.println("El camión está vacío");
 			return null;
 		}
 	}
@@ -29,7 +29,7 @@ public class Camion {
 	public Paquete<?> deshacerUltimaCarga() {
 		if (!cajaDelCamion.isEmpty()) {
 			Paquete<?> paqueteSacado = cajaDelCamion.pop();
-			System.out.println("Carga deshecha. Se bajó el paquete: "+ paqueteSacado.getId());
+			System.out.println("Se deshizo la carga. Se bajó el paquete: "+ paqueteSacado.getId());
 			return paqueteSacado;
 		}
 		return null;
