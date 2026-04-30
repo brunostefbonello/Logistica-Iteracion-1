@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 
 public class CentroDeDistribucion {
-//cola que usa componenet de prioridad
+
     private PriorityQueue<Paquete<?>> filaPaquetes;
     private HashSet<String> idsRegistrados;
 
@@ -30,7 +30,7 @@ public class CentroDeDistribucion {
             System.out.println("Error: Se intentó ingresar un paquete nulo.");
             return;
         }
-//trim elimina espacios en blanco
+
         if (nuevoPaquete.getId() == null || nuevoPaquete.getId().trim().isEmpty()
                 || nuevoPaquete.getDestino() == null || nuevoPaquete.getDestino().trim().isEmpty()
                 || nuevoPaquete.getContenido() == null) {
@@ -55,7 +55,7 @@ public class CentroDeDistribucion {
 
         System.out.println("Paquete " + nuevoPaquete.getId() + " ingresado al sistema.");
     }
-//poll saca y devuelve el ultimo elemento ingresado a la cola
+
     public Paquete<?> procesarSiguientePaquete() {
         if (!filaPaquetes.isEmpty()) {
             return filaPaquetes.poll();
