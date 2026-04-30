@@ -10,12 +10,12 @@ public class Camion {
 		this.patente = patente;
 		this.cajaDelCamion = new Stack<>();
 	}
-	//pone un item en la pila
+
 	public void cargarPaquete(Paquete<?> paqueteNuevo) {
 		cajaDelCamion.push(paqueteNuevo);
 		System.out.println("Paquete " + paqueteNuevo.getId() + " cargado al camión de patente: " + patente);
 	}
-	//pop saca el de arriba
+
 	public Paquete<?> descargarPaquete() {
 		if(!cajaDelCamion.isEmpty()) {
 			return cajaDelCamion.pop();
