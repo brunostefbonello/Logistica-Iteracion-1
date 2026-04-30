@@ -30,7 +30,7 @@ public class Main {
                 case 1:
                     System.out.println("\nCargando datos...");
                     Paquete<?>[] desdeJson = GestorArchivo.leerInventario();
-                    for (Paquete<?> p : desdeJson) {
+                    for (Paquete<?> p : desdeJson) {//p es variable temporal que toma todos los valores de desdejson
                         centro.recibirPaquete(p);
                     }
                     System.out.println("¡Inventario cargado exitosamente!");
@@ -72,7 +72,7 @@ public class Main {
                         System.out.println("2. Alimento");
                         System.out.println("3. Frágil");
                         System.out.print("Elegí una opción: ");
-
+//devuelve true si lo ingresado es un int
                         if (teclado.hasNextInt()) {
                             tipoContenido = teclado.nextInt();
                             teclado.nextLine();
