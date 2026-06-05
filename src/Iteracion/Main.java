@@ -1,5 +1,6 @@
 package Iteracion;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +8,34 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
+        
+        // Instancias originales
         CentroDeDistribucion centro = new CentroDeDistribucion();
         Camion camion = new Camion("AE-789-XX");
         
+        // Nuevas instancias integradas
+        RedDepositos redDepositos = new RedDepositos();
+        MapaRutas mapaRutas = new MapaRutas();
+        
+        // --- POBLACIÓN DE DATOS DE PRUEBA ---
+        
+        // 1. Datos para el Árbol Binario (Cada nodo ahora nace con su propio CentroDeDistribucion)
+        redDepositos.insertar(50, LocalDateTime.now().minusDays(10)); 
+        redDepositos.insertar(30, LocalDateTime.now().minusDays(45)); // Requiere auditoría
+        redDepositos.insertar(70, LocalDateTime.now().minusDays(5));  
+        redDepositos.insertar(20, LocalDateTime.now().minusDays(35)); // Requiere auditoría
+        redDepositos.insertar(40, LocalDateTime.now().minusDays(15)); 
+        redDepositos.insertar(60, LocalDateTime.now().minusDays(60)); // Requiere auditoría
+        redDepositos.insertar(80, LocalDateTime.now().minusDays(2));  
+
+        // 2. Datos para el Grafo de Rutas
+        mapaRutas.agregarRuta(1, 2, 50.5);
+        mapaRutas.agregarRuta(1, 3, 20.0);
+        mapaRutas.agregarRuta(3, 4, 15.5);
+        mapaRutas.agregarRuta(2, 4, 10.0);
+        mapaRutas.agregarRuta(4, 5, 30.0);
+        mapaRutas.agregarRuta(2, 5, 80.0);
+
         boolean salir = false;
 
         System.out.println("SISTEMA DE LOGÍSTICA");
@@ -19,7 +45,9 @@ public class Main {
             System.out.println("1. Cargar inventario desde JSON");
             System.out.println("2. Ingresar paquete manualmente");
             System.out.println("3. Despachar paquetes (Centro -> Camión)");
-            System.out.println("4. Entregar paquetes (Descargar Camión)");
+            System.out.println("4. Entregar paquetes manual (Descargar Camión)");
+            System.out.println("5. Red de Depósitos: Auditoría Regional (ABB)");
+            System.out.println("6. Hoja de Ruta: Simular Viaje de Camión (Grafo)");
             System.out.println("0. Salir");
             System.out.print("Elegí una opción: ");
 
@@ -37,119 +65,42 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.print("ID del paquete: ");
-                    String id = teclado.nextLine();
-                    
-                    System.out.print("Peso: ");
-                    double peso = teclado.nextDouble();
-                    teclado.nextLine(); 
-                    
-                    System.out.print("Destino: ");
-                    String destino = teclado.nextLine();
-                    
-                    boolean urgente;
+                    try {
+                        System.out.print("ID del paquete: ");
+                        String id = teclado.nextLine();
+                        System.out.print("Peso: ");
+                        double peso = teclado.nextDouble();
+                        teclado.nextLine(); 
+                        System.out.print("Destino: ");
+                        String destino = teclado.nextLine();
+                        System.out.print("¿Es urgente? (true/false): ");
+                        boolean urgente = teclado.nextBoolean();
+                        teclado.nextLine();
 
-                    while (true) {
-                        System.out.print("¿Es urgente? (si/no): ");
-                        String input = teclado.nextLine().trim().toLowerCase();
-
-                        if (input.equals("si")) {
-                            urgente = true;
-                            break;
-                        } else if (input.equals("no")) {
-                            urgente = false;
-                            break;
-                        } else {
-                            System.out.println("Entrada inválida. Escribí 'si' o 'no'.");
-                        }
-                    }
-                    
-                    int tipoContenido = 0;
-
-                    while (true) {
-                        System.out.println("Tipo de contenido:");
-                        System.out.println("1. Electrónica");
-                        System.out.println("2. Alimento");
-                        System.out.println("3. Frágil");
-                        System.out.print("Elegí una opción: ");
-
-                        if (teclado.hasNextInt()) {
-                            tipoContenido = teclado.nextInt();
-                            teclado.nextLine();
-
-                            if (tipoContenido >= 1 && tipoContenido <= 3) {
-                                break;
-                            } else {
-                                System.out.println("Opción inválida. Elegí 1, 2 o 3.");
-                            }
-                        } else {
-                            System.out.println("Entrada inválida. Tenés que ingresar un número entre el 1 y el 3.");
-                            teclado.nextLine();
-                        }
-                    }
-                    
-                    System.out.print("Descripción del contenido: ");
-                    String descripcion = teclado.nextLine();
-
-                    Paquete<?> nuevo = null;
-
-                    switch (tipoContenido) {
-                        case 1:
-                            nuevo = new Paquete<Electronica>(
-                                    id,
-                                    peso,
-                                    destino,
-                                    urgente,
-                                    new Electronica(descripcion)
-                            );
-                            break;
-
-                        case 2:
-                            nuevo = new Paquete<Alimento>(
-                                    id,
-                                    peso,
-                                    destino,
-                                    urgente,
-                                    new Alimento(descripcion)
-                            );
-                            break;
-
-                        case 3:
-                            nuevo = new Paquete<Fragil>(
-                                    id,
-                                    peso,
-                                    destino,
-                                    urgente,
-                                    new Fragil(descripcion)
-                            );
-                            break;
-                    }
-
-                    if (nuevo != null) {
+                        Paquete<String> nuevo = new Paquete<>(id, peso, destino, urgente, "Carga manual");
                         centro.recibirPaquete(nuevo);
+                        
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("ERROR: No se pudo crear el paquete. " + e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("Ocurrió un error inesperado.");
+                        teclado.nextLine();
                     }
                     break;
 
                 case 3:
                     System.out.println("\n--- PROCESANDO DESPACHO ---");
-
                     List<Paquete<?>> zonaPreEmbarque = new ArrayList<>();
                     Paquete<?> listo = centro.procesarSiguientePaquete();
-
+                    
                     while (listo != null) {
                         zonaPreEmbarque.add(listo);
                         listo = centro.procesarSiguientePaquete();
                     }
 
-                    if (zonaPreEmbarque.isEmpty()) {
-                        System.out.println("No hay paquetes para despachar.");
-                        break;
-                    }
-
                     for (int i = zonaPreEmbarque.size() - 1; i >= 0; i--) {
                         camion.cargarPaquete(zonaPreEmbarque.get(i));
                     }
-
                     System.out.println("Camión cargado y listo para salir.");
                     break;
 
@@ -160,6 +111,30 @@ public class Main {
                         System.out.println("Entregado: " + entregado.getId() + " en " + entregado.getDestino());
                         entregado = camion.descargarPaquete();
                     }
+                    break;
+
+                case 5:
+                    System.out.println("\n--- GESTIÓN DE RED DE DEPÓSITOS (ÁRBOL BINARIO) ---");
+                    redDepositos.auditarDepositos();
+                    
+                    System.out.print("Ingresá el nivel del árbol para ver los depósitos (ej. 0 para la raíz, 1, 2): ");
+                    int nivel = teclado.nextInt();
+                    teclado.nextLine();
+                    redDepositos.reportePorNivel(nivel);
+                    break;
+
+                case 6:
+                    System.out.println("\n--- SIMULANDO VIAJE DEL CAMIÓN (DIJKSTRA) ---");
+                    System.out.println("Importante: Asegurate de haber cargado el camión (Opción 3) antes de viajar.");
+                    System.out.println("Depósitos disponibles en la simulación: 1, 2, 3, 4, 5");
+                    System.out.print("Ingresá el ID del depósito de Origen: ");
+                    int origen = teclado.nextInt();
+                    System.out.print("Ingresá el ID del depósito de Destino: ");
+                    int destino = teclado.nextInt();
+                    teclado.nextLine();
+                    
+                    // NUEVO: Le pasamos el camión a la estructura de Grafos
+                    mapaRutas.simularViaje(camion, origen, destino);
                     break;
 
                 case 0:
