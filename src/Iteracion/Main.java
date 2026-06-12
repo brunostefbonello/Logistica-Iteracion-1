@@ -9,35 +9,43 @@ public class Main {
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
         
-        // Instancias originales
+        // --- 1. Instancias base --- 
         CentroDeDistribucion centro = new CentroDeDistribucion();
         Camion camion = new Camion("AE-789-XX");
         
-        // Nuevas instancias integradas
-        RedDepositos redDepositos = new RedDepositos();
-        MapaRutas mapaRutas = new MapaRutas();
+        // --- 2. Instancias del Árbol Binario (Refactorizadas) ---
+        GestorRedDepositos redDepositos = new GestorRedDepositos();
         
-        // --- POBLACIÓN DE DATOS DE PRUEBA ---
+        // --- 3. Instancias del Grafo y Rutas (Refactorizadas) ---
+        GrafoRutas grafoRutas = new GrafoRutas();
+        EstrategiaRuta algoritmoDijkstra = new CalculadorDijkstra();
+        SimuladorLogistico simulador = new SimuladorLogistico(algoritmoDijkstra);
         
-        // 1. Datos para el Árbol Binario (Cada nodo ahora nace con su propio CentroDeDistribucion)
+     // --- POBLACIÓN DE DATOS DE PRUEBA ---
         redDepositos.insertar(50, LocalDateTime.now().minusDays(10)); 
-        redDepositos.insertar(30, LocalDateTime.now().minusDays(45)); // Requiere auditoría
+        redDepositos.insertar(30, LocalDateTime.now().minusDays(45)); 
         redDepositos.insertar(70, LocalDateTime.now().minusDays(5));  
-        redDepositos.insertar(20, LocalDateTime.now().minusDays(35)); // Requiere auditoría
+        redDepositos.insertar(20, LocalDateTime.now().minusDays(35)); 
         redDepositos.insertar(40, LocalDateTime.now().minusDays(15)); 
-        redDepositos.insertar(60, LocalDateTime.now().minusDays(60)); // Requiere auditoría
+        redDepositos.insertar(60, LocalDateTime.now().minusDays(60)); 
         redDepositos.insertar(80, LocalDateTime.now().minusDays(2));  
 
-        // 2. Datos para el Grafo de Rutas
-        mapaRutas.agregarRuta(1, 2, 50.5);
-        mapaRutas.agregarRuta(1, 3, 20.0);
-        mapaRutas.agregarRuta(3, 4, 15.5);
-        mapaRutas.agregarRuta(2, 4, 10.0);
-        mapaRutas.agregarRuta(4, 5, 30.0);
-        mapaRutas.agregarRuta(2, 5, 80.0);
+        // ---> ESTO FALTABA: LAS RUTAS FÍSICAS <---
+        grafoRutas.agregarRuta(1, 2, 50.5);
+        grafoRutas.agregarRuta(1, 3, 20.0);
+        grafoRutas.agregarRuta(3, 4, 15.5);
+        grafoRutas.agregarRuta(2, 4, 10.0);
+        grafoRutas.agregarRuta(4, 5, 30.0);
+        grafoRutas.agregarRuta(2, 5, 80.0);
+
+        // --- ASIGNACIÓN DE CIUDADES A LOS NODOS ---
+        grafoRutas.asignarCiudad(1, DestinoPermitido.BUENOS_AIRES);
+        grafoRutas.asignarCiudad(2, DestinoPermitido.CORDOBA);
+        grafoRutas.asignarCiudad(3, DestinoPermitido.ROSARIO);
+        grafoRutas.asignarCiudad(4, DestinoPermitido.MENDOZA);
+        grafoRutas.asignarCiudad(5, DestinoPermitido.BUENOS_AIRES);
 
         boolean salir = false;
-
         System.out.println("SISTEMA DE LOGÍSTICA");
 
         while (!salir) {
@@ -71,17 +79,25 @@ public class Main {
                         System.out.print("Peso: ");
                         double peso = teclado.nextDouble();
                         teclado.nextLine(); 
-                        System.out.print("Destino: ");
-                        String destino = teclado.nextLine();
+                        
+                        // Validacion estricta de Enum
+                        System.out.println("Destinos disponibles: ");
+                        for (DestinoPermitido d : DestinoPermitido.values()) {
+                            System.out.println("- " + d.name());
+                        }
+                        System.out.print("Ingrese el Destino: ");
+                        String entradaDestino = teclado.nextLine().toUpperCase().trim();
+                        DestinoPermitido destinoValido = DestinoPermitido.valueOf(entradaDestino);
+
                         System.out.print("¿Es urgente? (true/false): ");
                         boolean urgente = teclado.nextBoolean();
                         teclado.nextLine();
 
-                        Paquete<String> nuevo = new Paquete<>(id, peso, destino, urgente, "Carga manual");
+                        Paquete<String> nuevo = new Paquete<>(id, peso, destinoValido, urgente, "Carga manual");
                         centro.recibirPaquete(nuevo);
                         
                     } catch (IllegalArgumentException e) {
-                        System.out.println("ERROR: No se pudo crear el paquete. " + e.getMessage());
+                        System.out.println("ERROR: Destino o formato incorrecto. El paquete NO fue creado.");
                     } catch (Exception e) {
                         System.out.println("Ocurrió un error inesperado.");
                         teclado.nextLine();
@@ -133,8 +149,7 @@ public class Main {
                     int destino = teclado.nextInt();
                     teclado.nextLine();
                     
-                    // NUEVO: Le pasamos el camión a la estructura de Grafos
-                    mapaRutas.simularViaje(camion, origen, destino);
+                    simulador.simularViaje(grafoRutas, camion, origen, destino);
                     break;
 
                 case 0:

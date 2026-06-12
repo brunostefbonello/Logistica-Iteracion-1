@@ -31,8 +31,9 @@ public class CentroDeDistribucion {
             return;
         }
 
+        // CORRECCIÓN AQUÍ: Quitamos el .trim().isEmpty() del destino porque ahora es un Enum
         if (nuevoPaquete.getId() == null || nuevoPaquete.getId().trim().isEmpty()
-                || nuevoPaquete.getDestino() == null || nuevoPaquete.getDestino().trim().isEmpty()
+                || nuevoPaquete.getDestino() == null 
                 || nuevoPaquete.getContenido() == null) {
 
             System.out.println("Error: El paquete tiene datos incompletos.");
@@ -50,9 +51,7 @@ public class CentroDeDistribucion {
         }
 
         filaPaquetes.add(nuevoPaquete);
-
         idsRegistrados.add(nuevoPaquete.getId());
-
         System.out.println("Paquete " + nuevoPaquete.getId() + " ingresado al sistema.");
     }
 
