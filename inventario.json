@@ -1,26 +1,37 @@
 [
   {
-    "id": "1",
-    "peso": 10.0,
-    "destino": "Palermo",
-    "urgente": false,
-    "tipoContenido": "Fragil",
-    "contenido": "Relojes"
-  },
-  {
-    "id": "2",
-    "peso": 60.0,
-    "destino": "Belgrano",
-    "urgente": false,
-    "tipoContenido": "Electronica",
-    "contenido": "Heladera"
-  },
-  {
-    "id": "3",
-    "peso": 2.0,
-    "destino": "Recoleta",
+    "id": "PQ-100",
+    "peso": 12.5,
+    "destino": "BUENOS_AIRES",
     "urgente": true,
-    "tipoContenido": "Fragil",
-    "contenido": "Jarrón"
+    "contenido": "Caja de componentes electrónicos"
+  },
+  {
+    "id": "PQ-101",
+    "peso": 65.0,
+    "destino": "CORDOBA",
+    "urgente": false,
+    "contenido": "Repuestos de motor pesado"
+  },
+  {
+    "id": "PQ-102",
+    "peso": 5.2,
+    "destino": "ROSARIO",
+    "urgente": true,
+    "contenido": "Documentos confidenciales y contratos"
+  },
+  {
+    "id": "PQ-103",
+    "peso": 20.0,
+    "destino": "MENDOZA",
+    "urgente": false,
+    "contenido": "Cajas de insumos para bodega"
+  },
+  {
+    "id": "PQ-104",
+    "peso": 55.5,
+    "destino": "BUENOS_AIRES",
+    "urgente": true,
+    "contenido": "Equipamiento médico frágil"
   }
 ]
