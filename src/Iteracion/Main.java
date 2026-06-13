@@ -9,19 +9,19 @@ public class Main {
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
         
-        // --- 1. Instancias base --- 
+       
         CentroDeDistribucion centro = new CentroDeDistribucion();
         Camion camion = new Camion("AE-789-XX");
         
-        // --- 2. Instancias del Árbol Binario (Refactorizadas) ---
+    
         GestorRedDepositos redDepositos = new GestorRedDepositos();
         
-        // --- 3. Instancias del Grafo y Rutas (Refactorizadas) ---
+  
         GrafoRutas grafoRutas = new GrafoRutas();
         EstrategiaRuta algoritmoDijkstra = new CalculadorDijkstra();
         SimuladorLogistico simulador = new SimuladorLogistico(algoritmoDijkstra);
         
-     // --- POBLACIÓN DE DATOS DE PRUEBA ---
+
         redDepositos.insertar(50, LocalDateTime.now().minusDays(10)); 
         redDepositos.insertar(30, LocalDateTime.now().minusDays(45)); 
         redDepositos.insertar(70, LocalDateTime.now().minusDays(5));  
@@ -30,7 +30,7 @@ public class Main {
         redDepositos.insertar(60, LocalDateTime.now().minusDays(60)); 
         redDepositos.insertar(80, LocalDateTime.now().minusDays(2));  
 
-        // ---> ESTO FALTABA: LAS RUTAS FÍSICAS <---
+
         grafoRutas.agregarRuta(1, 2, 50.5);
         grafoRutas.agregarRuta(1, 3, 20.0);
         grafoRutas.agregarRuta(3, 4, 15.5);
@@ -38,7 +38,6 @@ public class Main {
         grafoRutas.agregarRuta(4, 5, 30.0);
         grafoRutas.agregarRuta(2, 5, 80.0);
 
-        // --- ASIGNACIÓN DE CIUDADES A LOS NODOS ---
         grafoRutas.asignarCiudad(1, DestinoPermitido.BUENOS_AIRES);
         grafoRutas.asignarCiudad(2, DestinoPermitido.CORDOBA);
         grafoRutas.asignarCiudad(3, DestinoPermitido.ROSARIO);

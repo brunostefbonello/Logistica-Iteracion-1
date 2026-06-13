@@ -35,7 +35,7 @@ public class SimuladorLogistico {
                 Paquete<?> entregado = camion.descargarPaquete();
                 
                 while (entregado != null) {
-                    // Verificamos si la etiqueta del paquete coincide con la ciudad del nodo
+         
                     if (entregado.getDestino() == ciudadActual) {
                         System.out.println(" -> ÉXITO: Paquete " + entregado.getId() + " entregado en " + nombreCiudad);
                     } else {
@@ -45,7 +45,7 @@ public class SimuladorLogistico {
                     entregado = camion.descargarPaquete();
                 }
 
-                // Devolvemos al camión los paquetes que no eran de esta ciudad
+                
                 if (!paquetesRetenidos.isEmpty()) {
                     System.out.println("\n[Reorganizando camión con paquetes no entregados...]");
                     while (!paquetesRetenidos.isEmpty()) {
